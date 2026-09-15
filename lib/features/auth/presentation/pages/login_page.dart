@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../home/presentation/pages/home_page.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import 'register_page.dart';
@@ -85,8 +86,10 @@ class _LoginPageState extends State<LoginPage>
         listener: (context, state) {
           if (ModalRoute.of(context)?.isCurrent != true) return;
           if (state is AuthSuccess) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('Login berhasil')));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomePage()),
+            );
           }
 
           if (state is AuthFailure) {
