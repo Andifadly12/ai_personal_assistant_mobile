@@ -24,9 +24,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() {
     context.read<AuthCubit>().login(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
   }
 
   @override
@@ -35,21 +35,15 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login berhasil'),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Login berhasil')));
 
             // Nanti kita arahkan ke HomePage
           }
 
           if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -75,10 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                         'Masuk ke akun kamu',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                       const SizedBox(height: 32),
 
