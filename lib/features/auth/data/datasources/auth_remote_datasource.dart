@@ -20,7 +20,7 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<String> register({
+  Future<void> register({
     required String email,
     required String password,
     required String name,
@@ -29,18 +29,16 @@ class AuthRemoteDataSource {
       '${ApiConstants.baseUrl}/auth/register',
       data: {'email': email, 'password': password, 'name': name},
     );
-    if (response.statusCode == 201) {
-      return _readToken(response.data);
-    } else {
+    if (response.statusCode != 201) {
       throw Exception('Failed to register');
     }
   }
 
   String _readToken(dynamic data) {
-    final token = data is Map ? data['accessToken'] : null;
+    final token = data is Map ? data['access_token'] : null;
     if (token is! String || token.trim().isEmpty) {
       throw const FormatException(
-        'Respons autentikasi tidak berisi accessToken yang valid',
+        'Respons autentikasi tidak berisi access_token yang valid',
       );
     }
     return token;
