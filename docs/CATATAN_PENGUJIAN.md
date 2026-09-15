@@ -56,3 +56,19 @@ flutter run -d emulator-5554
 ```
 
 Port forwarding mungkin perlu diulang setelah emulator dimulai ulang.
+
+## Investigasi Internal Server Error
+
+Temuan terbaru menggantikan asumsi kontrak API pada catatan sebelumnya:
+
+- Login diagnostik ke backend lokal benar-benar menghasilkan HTTP 500.
+- Query Prisma langsung gagal karena DATABASE_URL tidak memiliki password, sedangkan PostgreSQL meminta autentikasi SCRAM.
+- Password yang diberikan telah diterapkan hanya pada backend/.env, tanpa commit atau pencatatan nilai. Verifikasi berikutnya menghasilkan P1000: kredensial untuk user database yang dikonfigurasi ditolak. Username/password database masih perlu dikonfirmasi sebelum backend dapat dinyatakan pulih.
+- Backend login mengembalikan `access_token`. Parser Flutter dan fixture pengujian sudah disesuaikan.
+- Backend register mengembalikan profil `{id, email, name}` dengan HTTP 201, tanpa token. Flutter sekarang menerima keberhasilan ini dan mengarahkan kembali ke login.
+- Pesan validasi backend berbentuk list sekarang ditampilkan; HTTP 5xx tetap menjadi kegagalan dengan pesan yang dapat dipahami pengguna.
+- Listener halaman login mengabaikan perubahan state saat halaman register berada di atasnya, agar registrasi tidak memunculkan notifikasi login berhasil.
+- Spasi password dipertahankan pada login dan register; pemakaian withOpacity yang deprecated diganti.
+- Verifikasi Flutter: analyzer bersih, 23 tes lulus. Hasil ini tidak berarti koneksi database backend sudah pulih.
+
+Setelah memperbaiki kredensial DATABASE_URL, restart proses backend agar konfigurasi terbaru dimuat. Jangan commit file .env.
