@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StubAdapter implements HttpClientAdapter {
-  Object? body = {'accessToken': 'test-token'};
+  Object? body = {'access_token': 'test-token'};
   int status = 200;
   RequestOptions? request;
 
@@ -88,6 +88,11 @@ void main() {
     'register sends profile and succeeds without starting a session',
     () async {
       adapter.status = 201;
+      adapter.body = {
+        'id': 'user-id',
+        'email': 'user@example.com',
+        'name': 'User',
+      };
       await cubit.register(
         name: 'User',
         email: 'user@example.com',
@@ -140,9 +145,9 @@ void main() {
 
   for (final body in <Object?>[
     {},
-    {'accessToken': ''},
-    {'accessToken': '  '},
-    {'accessToken': 42},
+    {'access_token': ''},
+    {'access_token': '  '},
+    {'access_token': 42},
     'invalid',
     null,
   ]) {
@@ -151,17 +156,36 @@ void main() {
       await cubit.login(email: 'user@example.com', password: 'password');
       expect(cubit.state, isA<AuthFailure>());
       expect(await storage.getToken(), isNull);
-      adapter.status = 201;
-      await expectLater(
-        source.register(
-          name: 'User',
-          email: 'user@example.com',
-          password: 'password',
-        ),
-        throwsFormatException,
-      );
     });
   }
+
+  test('server errors remain failures with actionable message', () async {
+    adapter.status = 500;
+    adapter.body = {'message': 'Internal server error'};
+    await cubit.register(
+      name: 'User',
+      email: 'user@example.com',
+      password: 'password',
+    );
+    expect(cubit.state, isA<AuthFailure>());
+    expect(
+      (cubit.state as AuthFailure).message,
+      'Server sedang bermasalah. Silakan coba lagi nanti.',
+    );
+    expect(await storage.getToken(), isNull);
+  });
+
+  test('validation message arrays are displayed', () async {
+    adapter.status = 400;
+    adapter.body = {
+      'message': ['email must be an email', 'password too short'],
+    };
+    await cubit.register(name: 'User', email: 'invalid', password: 'x');
+    expect(
+      (cubit.state as AuthFailure).message,
+      'email must be an email\npassword too short',
+    );
+  });
 
   test('logout removes saved token', () async {
     await storage.saveToken('test-token');
