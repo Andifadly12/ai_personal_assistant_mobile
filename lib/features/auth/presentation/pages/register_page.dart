@@ -1,0 +1,257 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/auth_cubit.dart';
+import '../cubit/auth_state.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage>
+    with SingleTickerProviderStateMixin {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  late AnimationController animationController;
+  late Animation<double> fadeAnimation;
+  late Animation<Offset> slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    fadeAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeIn,
+    );
+
+    slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    animationController.dispose();
+    super.dispose();
+  }
+
+  void _register() {
+    context.read<AuthCubit>().register(
+          name: nameController.text.trim(),
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+  }
+
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: const Color(0xFF0F2A44)),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(
+          color: Color(0xFF123C69),
+          width: 1.5,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Register berhasil, silakan login'),
+              ),
+            );
+
+            Navigator.pop(context);
+          }
+
+          if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF061826),
+                  Color(0xFF0B2A44),
+                  Color(0xFF123C69),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: FadeTransition(
+                    opacity: fadeAnimation,
+                    child: SlideTransition(
+                      position: slideAnimation,
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.94),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              blurRadius: 30,
+                              offset: const Offset(0, 16),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Icon(
+                              Icons.person_add_alt_1,
+                              size: 56,
+                              color: Color(0xFF123C69),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Buat Akun Baru',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF061826),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Mulai gunakan AI Personal Assistant',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            TextField(
+                              controller: nameController,
+                              decoration: _inputDecoration(
+                                'Nama',
+                                Icons.person_outline,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: _inputDecoration(
+                                'Email',
+                                Icons.email_outlined,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: _inputDecoration(
+                                'Password',
+                                Icons.lock_outline,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            SizedBox(
+                              height: 52,
+                              child: ElevatedButton(
+                                onPressed: isLoading ? null : _register,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF123C69),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  elevation: 4,
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 22,
+                                        width: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Register',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Sudah punya akun? Login',
+                                style: TextStyle(
+                                  color: Color(0xFF123C69),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
