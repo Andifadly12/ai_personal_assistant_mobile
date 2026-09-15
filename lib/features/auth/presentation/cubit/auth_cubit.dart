@@ -54,6 +54,14 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   String _errorMessage(DioException error, String fallback) {
+    if (error.type == DioExceptionType.connectionError) {
+      return 'Tidak dapat terhubung ke server. Pastikan backend aktif dan koneksi tersedia.';
+    }
+    if (error.type == DioExceptionType.connectionTimeout ||
+        error.type == DioExceptionType.sendTimeout ||
+        error.type == DioExceptionType.receiveTimeout) {
+      return 'Koneksi ke server terlalu lama. Silakan coba lagi.';
+    }
     if ((error.response?.statusCode ?? 0) >= 500) {
       return 'Server sedang bermasalah. Silakan coba lagi nanti.';
     }
