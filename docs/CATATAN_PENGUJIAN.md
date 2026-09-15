@@ -84,3 +84,13 @@ Setelah memperbaiki kredensial DATABASE_URL, restart proses backend agar konfigu
 - Pengujian register/login sukses di atas dilakukan langsung ke API, bukan lewat pengisian form emulator.
 
 Saat memulai sesi pengembangan berikutnya, pastikan backend tetap berjalan. Dari folder backend jalankan `npm run start:dev`, lalu dari proyek Flutter jalankan `adb -s emulator-5554 reverse tcp:4000 tcp:4000` dan `flutter run -d emulator-5554`. Jangan menjalankan dua backend bersamaan pada port 4000.
+
+## Pengujian HomePage dan navigasi autentikasi
+
+- Analisis awal menemukan dua pemakaian `withOpacity` yang deprecated pada HomePage; sudah diganti dengan `withValues`.
+- Tes layar 320 × 568 dengan skala teks 1,5 mereproduksi RenderFlex overflow. HomePage kini bisa digulir, dan menu AI Assistant tetap dapat dijangkau.
+- Tes navigasi memastikan login sukses mengganti route login dengan HomePage, menyimpan token, dan tidak menyediakan tombol back ke login.
+- Tes register memastikan sukses kembali ke LoginPage tanpa membuka HomePage atau menyimpan sesi login.
+- Hasil terbaru: `flutter analyze` bersih dan `flutter test` 27 tes lulus.
+- Pengujian navigasi menggunakan datasource palsu dan penyimpanan mock; backend dan emulator tidak diuji ulang pada perubahan ini.
+- Menu Tasks, Calendar, Notifications, dan AI Assistant pada HomePage masih memiliki callback placeholder. Navigasi login ke Home sudah tersedia; navigasi menu tersebut belum diimplementasikan.
