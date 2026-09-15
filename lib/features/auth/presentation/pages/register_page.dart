@@ -35,15 +35,13 @@ class _RegisterPageState extends State<RegisterPage>
       curve: Curves.easeIn,
     );
 
-    slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     animationController.forward();
   }
@@ -59,10 +57,10 @@ class _RegisterPageState extends State<RegisterPage>
 
   void _register() {
     context.read<AuthCubit>().register(
-          name: nameController.text.trim(),
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
   }
 
   InputDecoration _inputDecoration(String label, IconData icon) {
@@ -77,10 +75,7 @@ class _RegisterPageState extends State<RegisterPage>
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(
-          color: Color(0xFF123C69),
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: Color(0xFF123C69), width: 1.5),
       ),
     );
   }
@@ -92,18 +87,15 @@ class _RegisterPageState extends State<RegisterPage>
         listener: (context, state) {
           if (state is AuthSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Register berhasil, silakan login'),
-              ),
+              const SnackBar(content: Text('Register berhasil, silakan login')),
             );
 
             Navigator.pop(context);
           }
 
           if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -134,11 +126,11 @@ class _RegisterPageState extends State<RegisterPage>
                       child: Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.94),
+                          color: Colors.white.withValues(alpha: 0.94),
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withValues(alpha: 0.25),
                               blurRadius: 30,
                               offset: const Offset(0, 16),
                             ),
