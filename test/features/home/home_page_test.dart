@@ -20,6 +20,7 @@ void main() {
         home: const HomePage(),
       ),
     );
+    await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tester.ensureVisible(find.text('AI Assistant'));
     expect(find.text('AI Assistant').hitTestable(), findsOneWidget);
