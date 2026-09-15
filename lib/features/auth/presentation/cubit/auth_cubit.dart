@@ -54,8 +54,17 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   String _errorMessage(DioException error, String fallback) {
+    if ((error.response?.statusCode ?? 0) >= 500) {
+      return 'Server sedang bermasalah. Silakan coba lagi nanti.';
+    }
     final data = error.response?.data;
     final message = data is Map ? data['message'] : null;
+    if (message is List) {
+      final messages = message.whereType<String>().where(
+        (text) => text.trim().isNotEmpty,
+      );
+      if (messages.isNotEmpty) return messages.join('\n');
+    }
     return message is String && message.trim().isNotEmpty ? message : fallback;
   }
 
