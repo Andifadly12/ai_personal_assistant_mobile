@@ -94,3 +94,11 @@ Saat memulai sesi pengembangan berikutnya, pastikan backend tetap berjalan. Dari
 - Hasil terbaru: `flutter analyze` bersih dan `flutter test` 27 tes lulus.
 - Pengujian navigasi menggunakan datasource palsu dan penyimpanan mock; backend dan emulator tidak diuji ulang pada perubahan ini.
 - Menu Tasks, Calendar, Notifications, dan AI Assistant pada HomePage masih memiliki callback placeholder. Navigasi login ke Home sudah tersedia; navigasi menu tersebut belum diimplementasikan.
+
+## Footer, maskot, dan visibilitas password
+
+- Home mendapat animasi masuk fade/slide, maskot robot, dan footer mint berisi pesan penyemangat. Footer berada di akhir konten yang bisa digulir.
+- Login dan register memakai maskot robot dengan animasi sapaan pendek; ketuk maskot untuk mengulang. Animasi baru mengikuti pengaturan disableAnimations.
+- Ikon mata pada kedua form menampilkan/menyembunyikan password tanpa mengubah teks. Password tetap tersembunyi saat halaman pertama dibuka.
+- Analyzer bersih dan 27 tes lulus, termasuk navigasi, interaksi ikon mata, serta layout Home di layar kecil dengan teks besar.
+- Pengujian dilakukan melalui widget/unit test; tampilan terbaru belum diperiksa langsung di emulator.
