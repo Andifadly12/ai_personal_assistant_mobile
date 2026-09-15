@@ -59,6 +59,23 @@ void main() {
     await openLogin(tester);
     await tester.enterText(find.byType(TextField).first, 'user@example.com');
     await tester.enterText(find.byType(TextField).last, 'password');
+    await tester.ensureVisible(find.byTooltip('Tampilkan password'));
+    await tester.tap(find.byTooltip('Tampilkan password'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(find.byType(TextField).last).obscureText,
+      isFalse,
+    );
+    expect(
+      tester.widget<TextField>(find.byType(TextField).last).controller!.text,
+      'password',
+    );
+    await tester.tap(find.byTooltip('Sembunyikan password'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(find.byType(TextField).last).obscureText,
+      isTrue,
+    );
     final button = find.widgetWithText(ElevatedButton, 'Login');
     await tester.ensureVisible(button);
     await tester.tap(button);
