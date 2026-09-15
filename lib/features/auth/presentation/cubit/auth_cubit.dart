@@ -9,15 +9,10 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthRemoteDataSource authRemoteDataSource;
   final TokenStorage tokenStorage;
 
-  AuthCubit({
-    required this.authRemoteDataSource,
-    required this.tokenStorage,
-  }) : super(AuthInitial());
+  AuthCubit({required this.authRemoteDataSource, required this.tokenStorage})
+    : super(AuthInitial());
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(AuthLoading());
 
     try {
@@ -30,11 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(AuthSuccess());
     } on DioException catch (e) {
-      emit(
-        AuthFailure(
-          e.response?.data['message']?.toString() ?? 'Login gagal',
-        ),
-      );
+      emit(AuthFailure(_errorMessage(e, 'Login gagal')));
     } catch (_) {
       emit(AuthFailure('Terjadi kesalahan'));
     }
@@ -56,18 +47,24 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(AuthSuccess());
     } on DioException catch (e) {
-      emit(
-        AuthFailure(
-          e.response?.data['message']?.toString() ?? 'Register gagal',
-        ),
-      );
+      emit(AuthFailure(_errorMessage(e, 'Register gagal')));
     } catch (_) {
       emit(AuthFailure('Terjadi kesalahan'));
     }
   }
 
+  String _errorMessage(DioException error, String fallback) {
+    final data = error.response?.data;
+    final message = data is Map ? data['message'] : null;
+    return message is String && message.trim().isNotEmpty ? message : fallback;
+  }
+
   Future<void> logout() async {
-    await tokenStorage.clearToken();
-    emit(AuthInitial());
+    try {
+      await tokenStorage.deleteToken();
+      emit(AuthInitial());
+    } catch (_) {
+      emit(AuthFailure('Logout gagal'));
+    }
   }
 }
