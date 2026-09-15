@@ -35,15 +35,13 @@ class _LoginPageState extends State<LoginPage>
       curve: Curves.easeIn,
     );
 
-    slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: animationController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     animationController.forward();
   }
@@ -58,9 +56,9 @@ class _LoginPageState extends State<LoginPage>
 
   void _login() {
     context.read<AuthCubit>().login(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
   }
 
   InputDecoration _inputDecoration(String label, IconData icon) {
@@ -75,10 +73,7 @@ class _LoginPageState extends State<LoginPage>
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(
-          color: Color(0xFF123C69),
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: Color(0xFF123C69), width: 1.5),
       ),
     );
   }
@@ -88,18 +83,15 @@ class _LoginPageState extends State<LoginPage>
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
+          if (ModalRoute.of(context)?.isCurrent != true) return;
           if (state is AuthSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login berhasil'),
-              ),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Login berhasil')));
           }
 
           if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -130,11 +122,11 @@ class _LoginPageState extends State<LoginPage>
                       child: Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.94),
+                          color: Colors.white.withValues(alpha: 0.94),
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withValues(alpha: 0.25),
                               blurRadius: 30,
                               offset: const Offset(0, 16),
                             ),
