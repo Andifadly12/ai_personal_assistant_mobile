@@ -187,6 +187,31 @@ void main() {
     );
   });
 
+  test('register reports an unreachable backend clearly', () async {
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              type: DioExceptionType.connectionError,
+            ),
+          );
+        },
+      ),
+    );
+    await cubit.register(
+      name: 'User',
+      email: 'user@example.com',
+      password: 'password',
+    );
+    expect(cubit.state, isA<AuthFailure>());
+    expect(
+      (cubit.state as AuthFailure).message,
+      'Tidak dapat terhubung ke server. Pastikan backend aktif dan koneksi tersedia.',
+    );
+  });
+
   test('logout removes saved token', () async {
     await storage.saveToken('test-token');
     await cubit.logout();
