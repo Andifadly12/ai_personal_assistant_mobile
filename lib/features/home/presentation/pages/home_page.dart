@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widgets/assistant_mascot.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -13,87 +15,145 @@ class HomePage extends StatelessWidget {
         title: const Text('AI Personal Assistant'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF061826), Color(0xFF123C69)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+      body: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: Duration(
+          milliseconds: MediaQuery.disableAnimationsOf(context) ? 0 : 700,
+        ),
+        curve: Curves.easeOutCubic,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, 20 * (1 - value)),
+            child: child,
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF061826), Color(0xFF123C69)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Selamat Datang',
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Apa yang ingin kamu kerjakan hari ini?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: AssistantMascot()),
+                    SizedBox(height: 12),
+                    Text(
+                      'Selamat Datang',
+                      style: TextStyle(color: Colors.white70, fontSize: 16),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 8),
+                    Text(
+                      'Apa yang ingin kamu kerjakan hari ini?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-            const Text(
-              'Menu Utama',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+              const Text(
+                'Menu Utama',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            _HomeMenuItem(
-              icon: Icons.task_alt,
-              title: 'Tasks',
-              subtitle: 'Kelola tugas dan deadline',
-              onTap: () {
-                // Nanti masuk ke Task Page
-              },
-            ),
+              _HomeMenuItem(
+                icon: Icons.task_alt,
+                title: 'Tasks',
+                subtitle: 'Kelola tugas dan deadline',
+                onTap: () {
+                  // Nanti masuk ke Task Page
+                },
+              ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            _HomeMenuItem(
-              icon: Icons.calendar_month,
-              title: 'Calendar',
-              subtitle: 'Lihat jadwal dan reminder',
-              onTap: () {},
-            ),
+              _HomeMenuItem(
+                icon: Icons.calendar_month,
+                title: 'Calendar',
+                subtitle: 'Lihat jadwal dan reminder',
+                onTap: () {},
+              ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            _HomeMenuItem(
-              icon: Icons.notifications_active,
-              title: 'Notifications',
-              subtitle: 'Lihat notifikasi terbaru',
-              onTap: () {},
-            ),
+              _HomeMenuItem(
+                icon: Icons.notifications_active,
+                title: 'Notifications',
+                subtitle: 'Lihat notifikasi terbaru',
+                onTap: () {},
+              ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            _HomeMenuItem(
-              icon: Icons.smart_toy_outlined,
-              title: 'AI Assistant',
-              subtitle: 'Asisten pintar untuk bantu aktivitas',
-              onTap: () {},
-            ),
-          ],
+              _HomeMenuItem(
+                icon: Icons.smart_toy_outlined,
+                title: 'AI Assistant',
+                subtitle: 'Asisten pintar untuk bantu aktivitas',
+                onTap: () {},
+              ),
+              const SizedBox(height: 28),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE4F3F0),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFFCBE5DF)),
+                ),
+                child: const Column(
+                  children: [
+                    Icon(
+                      Icons.local_florist_rounded,
+                      color: Color(0xFF408879),
+                      size: 30,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Langkah kecil, hari yang berarti.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF123C69),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Tarik napas. Kamu tidak harus menyelesaikan semuanya sekaligus.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Color(0xFF47645D), height: 1.5),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Ditemani AI • Dibuat untuk harimu',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Color(0xFF47645D), fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: MediaQuery.paddingOf(context).bottom),
+            ],
+          ),
         ),
       ),
     );
