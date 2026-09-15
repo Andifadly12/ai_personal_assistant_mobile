@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/widgets/assistant_mascot.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../home/presentation/pages/home_page.dart';
@@ -17,6 +20,7 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   late AnimationController animationController;
   late Animation<double> fadeAnimation;
@@ -138,10 +142,10 @@ class _LoginPageState extends State<LoginPage>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Icon(
-                              Icons.auto_awesome,
-                              size: 56,
-                              color: Color(0xFF123C69),
+                            Center(
+                              child: AssistantMascot(
+                                hideEyes: !_obscurePassword,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             const Text(
@@ -174,11 +178,29 @@ class _LoginPageState extends State<LoginPage>
                             const SizedBox(height: 16),
                             TextField(
                               controller: passwordController,
-                              obscureText: true,
-                              decoration: _inputDecoration(
-                                'Password',
-                                Icons.lock_outline,
-                              ),
+                              obscureText: _obscurePassword,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              decoration:
+                                  _inputDecoration(
+                                    'Password',
+                                    Icons.lock_outline,
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      tooltip: _obscurePassword
+                                          ? 'Tampilkan password'
+                                          : 'Sembunyikan password',
+                                      onPressed: () => setState(
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
+                                      ),
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                      ),
+                                    ),
+                                  ),
                             ),
                             const SizedBox(height: 24),
                             SizedBox(
