@@ -21,4 +21,25 @@ class AuthRemoteDatasource {
             throw Exception('Failed to login');
         }
     }
+
+    Future<String> register({
+        required String email,
+        required String password,
+        required String name,
+    })async {
+        final response = await dio.post(
+            '${ApiConstants.baseUrl}/auth/register',
+            data: {
+                'email': email,
+                'password': password,
+                'name': name,
+            },
+        );
+        if (response.statusCode == 201) {
+            return response.data['accessToken'];
+        } else {
+            throw Exception('Failed to register');
+        }
+    }
+    
 }
