@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final dio = Dio();
     final tokenStorage = TokenStorage();
-    final authRemoteDataSource = AuthRemoteDataSource(dio);
+    final authRemoteDataSource = AuthRemoteDataSource(dio: dio);
 
     return MultiBlocProvider(
       providers: [
@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'AI Personal Assistant',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
         home: const LoginPage(),
