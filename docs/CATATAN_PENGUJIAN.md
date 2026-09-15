@@ -102,3 +102,12 @@ Saat memulai sesi pengembangan berikutnya, pastikan backend tetap berjalan. Dari
 - Ikon mata pada kedua form menampilkan/menyembunyikan password tanpa mengubah teks. Password tetap tersembunyi saat halaman pertama dibuka.
 - Analyzer bersih dan 27 tes lulus, termasuk navigasi, interaksi ikon mata, serta layout Home di layar kecil dengan teks besar.
 - Pengujian dilakukan melalui widget/unit test; tampilan terbaru belum diperiksa langsung di emulator.
+
+## Bottom bar interaktif
+
+- Home memiliki lima tab: Beranda, Tugas, Asisten, Jadwal, dan Notifikasi.
+- Tombol Asisten terletak di tengah dengan ukuran 60 × 60, ikon lebih besar, gradasi, bayangan, dan border emas saat aktif. Tombol samping memakai area ikon 44 × 36.
+- Tab memiliki animasi perubahan warna dan penanda aksesibilitas selected. Kartu menu Home juga memilih tab yang sesuai.
+- Fitur selain Beranda menampilkan keterangan sedang disiapkan; belum terhubung ke data atau layanan AI.
+- Analyzer bersih; 27 tes sebelumnya lulus. Tes tambahan pergantian tab serta tes layar kecil juga lulus (total suite kini 28 tes).
+- Belum dilakukan pemeriksaan visual langsung di emulator untuk perubahan ini.
