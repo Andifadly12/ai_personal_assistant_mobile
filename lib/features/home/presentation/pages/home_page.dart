@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
         title: const Text('AI Personal Assistant'),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,10 +23,7 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF061826),
-                    Color(0xFF123C69),
-                  ],
+                  colors: [Color(0xFF061826), Color(0xFF123C69)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -37,10 +34,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     'Selamat Datang',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -59,10 +53,7 @@ class HomePage extends StatelessWidget {
 
             const Text(
               'Menu Utama',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 16),
@@ -136,7 +127,7 @@ class _HomeMenuItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 18,
                 offset: const Offset(0, 8),
               ),
@@ -148,13 +139,10 @@ class _HomeMenuItem extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF123C69).withOpacity(0.1),
+                  color: const Color(0xFF123C69).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(
-                  icon,
-                  color: const Color(0xFF123C69),
-                ),
+                child: Icon(icon, color: const Color(0xFF123C69)),
               ),
 
               const SizedBox(width: 16),
@@ -173,18 +161,13 @@ class _HomeMenuItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: const TextStyle(
-                        color: Colors.black54,
-                      ),
+                      style: const TextStyle(color: Colors.black54),
                     ),
                   ],
                 ),
               ),
 
-              const Icon(
-                Icons.chevron_right,
-                color: Colors.black38,
-              ),
+              const Icon(Icons.chevron_right, color: Colors.black38),
             ],
           ),
         ),
