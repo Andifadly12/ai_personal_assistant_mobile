@@ -5,8 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   testWidgets('App displays login form and obscures password', (tester) async {
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
     expect(find.text('AI Personal Assistant'), findsOneWidget);
-    expect(find.text('Masuk ke akun kamu'), findsOneWidget);
+    expect(find.text('Masuk dan kelola aktivitasmu'), findsOneWidget);
     expect(find.widgetWithText(ElevatedButton, 'Login'), findsOneWidget);
     final fields = find.byType(TextField);
     expect(fields, findsNWidgets(2));
