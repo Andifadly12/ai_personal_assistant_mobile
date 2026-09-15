@@ -72,3 +72,15 @@ Temuan terbaru menggantikan asumsi kontrak API pada catatan sebelumnya:
 - Verifikasi Flutter: analyzer bersih, 23 tes lulus. Hasil ini tidak berarti koneksi database backend sudah pulih.
 
 Setelah memperbaiki kredensial DATABASE_URL, restart proses backend agar konfigurasi terbaru dimuat. Jangan commit file .env.
+
+## Pemulihan backend untuk register emulator
+
+- Pemeriksaan terbaru: koneksi PostgreSQL berhasil. Masalah kredensial pada investigasi sebelumnya sudah tidak muncul.
+- Backend port 4000 ternyata tidak berjalan (`connection refused`). Backend dinyalakan kembali menggunakan `node dist/src/main.js` dari folder backend.
+- Port forwarding emulator `tcp:4000` ke host `tcp:4000` sudah aktif.
+- Pengujian langsung API dengan akun sementara: register HTTP 201, login HTTP 200 dan access_token tersedia. Akun sementara sudah dihapus setelah pengujian.
+- Pesan kegagalan koneksi dan timeout di Flutter sekarang dibedakan dari penolakan register oleh server.
+- `flutter analyze`: bersih; `flutter test`: 24 tes lulus.
+- Pengujian register/login sukses di atas dilakukan langsung ke API, bukan lewat pengisian form emulator.
+
+Saat memulai sesi pengembangan berikutnya, pastikan backend tetap berjalan. Dari folder backend jalankan `npm run start:dev`, lalu dari proyek Flutter jalankan `adb -s emulator-5554 reverse tcp:4000 tcp:4000` dan `flutter run -d emulator-5554`. Jangan menjalankan dua backend bersamaan pada port 4000.
